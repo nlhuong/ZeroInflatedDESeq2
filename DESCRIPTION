@@ -1,0 +1,25 @@
+Package: ZeroInflatedDESeq2
+Type: Package
+Title: Differential gene expression analysis based on the negative
+        binomial distribution
+Version: 1.8.1
+Author: Michael Love (HSPH Boston), Simon Anders, Wolfgang Huber (EMBL
+    Heidelberg)
+Maintainer: Michael Love <michaelisaiahlove@gmail.com>
+Description: Estimate variance-mean dependence in count data from
+    high-throughput sequencing assays and test for differential
+    expression based on a model using the negative binomial
+    distribution.
+License: LGPL (>= 3)
+VignetteBuilder: knitr
+Imports: BiocGenerics (>= 0.7.5), Biobase, BiocParallel, genefilter,
+        methods, locfit, geneplotter, ggplot2, Hmisc
+Depends: S4Vectors, IRanges, GenomicRanges, Rcpp (>= 0.10.1),
+        RcppArmadillo (>= 0.3.4.4)
+Suggests: testthat, gplots, knitr, RColorBrewer, BiocStyle, airway,
+        pasilla (>= 0.2.10), DESeq, vsn
+LinkingTo: Rcpp, RcppArmadillo
+biocViews: Sequencing, ChIPSeq, RNASeq, SAGE, DifferentialExpression,
+        GeneExpression
+NeedsCompilation: yes
+Packaged: 2015-05-02 06:08:00 UTC; biocbuild
