@@ -419,11 +419,7 @@ makeExampleDESeqDataSet <- function(n=1000,m=12,betaSD=0,interceptMean=4,interce
 #' Given a matrix or data frame of count data, this function estimates the size
 #' factors as follows: Each column is divided by the ARITHMETIC (not geometric
 #' sicne there are many zero counts) means of the rows. The median (or, if requested, 
-<<<<<<< HEAD
 #' another location estimator) of these ratios (skipping the genes with a arithmetic 
-=======
-#' another location estimator) of these ratios (skipping the genes with a geometric 
->>>>>>> e7ac3a12d6491c2071572a0f968119c40558ae01
 #' mean of zero) is used as the size factor for this column. Typically, one will 
 #' not call this function directly, but use \code{\link{estimateSizeFactors}}.
 #' 
