@@ -294,7 +294,7 @@ normalizationFactors.DESeqDataSet <- function(object) {
 #' @note Normalization factors are on the scale of the counts (similar to \code{\link{sizeFactors}})
 #' and unlike offsets, which are typically on the scale of the predictors (in this case, log counts).
 #' Normalization factors should include library size normalization. They should have
-#' row-wise geometric mean near 1, as is the case with size factors, such that the mean of normalized
+#' row-wise arithmetic mean near 1, as is the case with size factors, such that the mean of normalized
 #' counts is close to the mean of unnormalized counts. See example code below.
 #'
 #' @docType methods
@@ -313,7 +313,7 @@ normalizationFactors.DESeqDataSet <- function(object) {
 #'                       dimnames=list(1:nrow(dds),1:ncol(dds)))
 #'
 #' # the normalization factors matrix should not have 0's in it
-#' # it should have geometric mean near 1 for each row
+#' # it should have arithmetic mean near 1 for each row
 #' normFactors <- normFactors / exp(rowMeans(log(normFactors)))
 #' normalizationFactors(dds) <- normFactors
 #'
@@ -339,7 +339,7 @@ setReplaceMethod("normalizationFactors", signature(object="DESeqDataSet", value=
                  })
 
 estimateSizeFactors.DESeqDataSet <- function(object, type=c("ratio","iterate"),
-                                             locfunc=stats::median, geoMeans, controlGenes, normMatrix) {
+                                             locfunc=stats::median, ariMeans, controlGenes, normMatrix) {
   type <- match.arg(type, c("ratio","iterate"))
   object <- sanitizeColData(object)
   if (type == "iterate") {
@@ -347,12 +347,12 @@ estimateSizeFactors.DESeqDataSet <- function(object, type=c("ratio","iterate"),
   } else {
     if (missing(normMatrix)) {
       sizeFactors(object) <- estimateSizeFactorsForMatrix(counts(object), locfunc=locfunc,
-                                                          geoMeans=geoMeans,
+                                                          ariMeans=ariMeans,
                                                           controlGenes=controlGenes)
     } else {
       normalizationFactors(object) <- estimateNormFactors(counts(object), normMatrix=normMatrix,
                                                           locfunc=locfunc,
-                                                          geoMeans=geoMeans,
+                                                          ariMeans=ariMeans,
                                                           controlGenes=controlGenes)
       message("adding normalization factors which account for library size")
     }
@@ -390,7 +390,7 @@ estimateSizeFactors.DESeqDataSet <- function(object, type=c("ratio","iterate"),
 #' @param object a DESeqDataSet
 #' @param type either "ratio" or "iterate". "ratio" uses the standard
 #' median ratio method introduced in DESeq. The size factor is the
-#' median ratio of the sample over a pseudosample: for each gene, the geometric mean
+#' median ratio of the sample over a pseudosample: for each gene, the arithmetic mean
 #' of all samples. "iterate" offers an alternative estimator, which can be
 #' used even when all genes contain a sample with a zero. This estimator
 #' iterates between estimating the dispersion with a design of ~1, and
@@ -399,9 +399,9 @@ estimateSizeFactors.DESeqDataSet <- function(object, type=c("ratio","iterate"),
 #' @param locfunc a function to compute a location for a sample. By default, the
 #' median is used. However, especially for low counts, the
 #' \code{\link[genefilter]{shorth}} function from the genefilter package may give better results.
-#' @param geoMeans by default this is not provided and the
-#' geometric means of the counts are calculated within the function.
-#' A vector of geometric means from another count matrix can be provided
+#' @param ariMeans by default this is not provided and the
+#' arithmetic means of the counts are calculated within the function.
+#' A vector of arithmetic means from another count matrix can be provided
 #' for a "frozen" size factor calculation
 #' @param controlGenes optional, numeric or logical index vector specifying those genes to
 #' use for size factor estimation (e.g. housekeeping or spike-in genes)
@@ -434,8 +434,8 @@ estimateSizeFactors.DESeqDataSet <- function(object, type=c("ratio","iterate"),
 #' dds <- estimateSizeFactors(dds, normMatrix=m)
 #' normalizationFactors(dds)[1:3,]
 #' 
-#' geoMeans <- exp(rowMeans(log(counts(dds))))
-#' dds <- estimateSizeFactors(dds,geoMeans=geoMeans)
+#' ariMeans <- rowMeans(counts(dds))
+#' dds <- estimateSizeFactors(dds,ariMeans=ariMeans)
 #' sizeFactors(dds)
 #'
 #' @export

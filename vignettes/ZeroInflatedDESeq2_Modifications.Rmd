@@ -1,0 +1,15 @@
+---
+title: "ZeroInflatedDESeq2 Changes from DESeq2"
+author: "Lan Huong Nguyen"
+date: "October 3, 2015"
+output: html_document
+---
+
+This documents registers all the changes made to the DESeq2 package in 
+the ZeroInflatedDESeq2.
+
+1. **estimateSizeFactorsForMatrix** change the geometric mean in the denominator
+to arithmetic mean since the microbiome count data usially has many zeros,
+causing the denominator for almost all genes to be zero.
+
+2. 
